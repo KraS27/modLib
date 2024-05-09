@@ -11,12 +11,7 @@ namespace modLib.Repositories
         {
             _context = context;
         }
-
-        public Task CreateAsync(T entity)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public async Task<IEnumerable<T>> GetAllAsync()
         {
             return await _context.Set<T>().ToListAsync();
@@ -46,6 +41,12 @@ namespace modLib.Repositories
         public async Task UpdateAsync(T entity)
         {
             _context.Set<T>().Update(entity);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task CreateAsync(T entity)
+        {
+            await _context.Set<T>().AddAsync(entity);
             await _context.SaveChangesAsync();
         }
     }

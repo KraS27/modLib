@@ -6,29 +6,20 @@ namespace modLib.Controllers
 {
     [ApiController]
     public class ModController
-    {
-        public AppDbContext _context;
+    {       
+        private readonly ModsRepository _repository;
 
-        public ModController(AppDbContext context)
+        public ModController(ModsRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
-
+     
         [HttpGet("mods")]
         public IActionResult GetMods()
         {
-            var mods = new List<ModModel>
-            {
-                new ModModel {Name="ffafa", Description= "fasfasg",Path="http://5261fas51"},
-                new ModModel {Name="asfgva", Description= "gasgasa",Path="http://587472gsagweg"},
-            };
+            var mods = _repository.GetAllAsync().Result;
 
-            _context.Mods.AddRange(mods);
-
-            _context.SaveChanges();
-
-            var modsDb = _context.Mods.ToList();
-            return new OkObjectResult(modsDb);
+            return new OkObjectResult(mods);
         }
     }
 }

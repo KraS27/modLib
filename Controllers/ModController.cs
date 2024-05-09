@@ -24,6 +24,7 @@ namespace modLib.Controllers
             };
 
             _context.Mods.AddRange(mods);
+
             _context.SaveChanges();
 
             var modsDb = _context.Mods.ToList();

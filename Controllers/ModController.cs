@@ -5,7 +5,7 @@ using modLib.Models.Entities;
 namespace modLib.Controllers
 {
     [ApiController]
-    public class ModController
+    public class ModController : ControllerBase
     {       
         private readonly ModsService _service;
 
@@ -21,7 +21,7 @@ namespace modLib.Controllers
             {
                 var mod = await _service.GetAsync(id);
 
-                return mod is null ? new NoContentResult() : new OkObjectResult(mod);
+                return mod is null ? NoContent() : Ok(mod);
             }
             catch 
             {
@@ -36,7 +36,7 @@ namespace modLib.Controllers
             {
                 var mods = await _service.GetAllAsync();
 
-                return new OkObjectResult(mods);
+                return Ok(mods);
             }
             catch
             {
@@ -51,7 +51,7 @@ namespace modLib.Controllers
             {
                 await _service.CreateAsync(modModel);
 
-                return new OkObjectResult(modModel.Id);
+                return Ok(modModel.Id);
             }
             catch
             {
@@ -66,11 +66,11 @@ namespace modLib.Controllers
             {
                 await _service.RemoveAsync(id);
 
-                return new OkResult();
+                return Ok();
             }
             catch(ArgumentNullException)
             {
-                return new NotFoundResult();
+                return NotFound();
             }
             catch
             {
@@ -85,11 +85,11 @@ namespace modLib.Controllers
             {
                 await _service.UpdateAsync(modModel);
 
-                return new OkResult();
+                return Ok();
             }
             catch (NullReferenceException)
             {
-                return new NotFoundResult();
+                return NotFound();
             }
             catch
             {

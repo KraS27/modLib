@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using modLib.Models.Entities;
 
-namespace modLib.Models.Configurations
+namespace modLib.DB.Configurations
 {
     public class ModModelConfiguration : IEntityTypeConfiguration<ModModel>
     {
@@ -11,7 +11,7 @@ namespace modLib.Models.Configurations
             builder.ToTable("mods");
 
             builder.HasKey(x => x.Id);
-            
+
             builder.Property(x => x.Id).IsRequired();
             builder.Property(x => x.Name).HasMaxLength(60).IsRequired();
             builder.Property(x => x.Description);

@@ -1,8 +1,8 @@
 ﻿using modLib.Models.Entities;
 
-namespace modLib.Repositories
+namespace modLib.BL
 {
-    public interface IBaseRepository<T> where T : BaseModel
+    public interface IBaseService<T> where T : BaseModel
     {
         public Task<IEnumerable<T>> GetAllAsync();
 

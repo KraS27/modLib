@@ -1,6 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
-using modLib.Repositories;
+using modLib.BL;
+using modLib.DB;
 
 namespace modLib
 {
@@ -16,7 +17,7 @@ namespace modLib
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connection));
 
-            builder.Services.AddScoped<ModsRepository, ModsRepository>();
+            builder.Services.AddScoped<ModsService>();
 
             var app = builder.Build();
 

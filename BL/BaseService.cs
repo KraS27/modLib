@@ -1,17 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using modLib.DB;
 using modLib.Models.Entities;
 
-namespace modLib.Repositories
+namespace modLib.BL
 {
-    public class BaseRepository<T> : IBaseRepository<T> where T : BaseModel
+    public class BaseService<T> : IBaseService<T> where T : BaseModel
     {
         protected readonly AppDbContext _context;
 
-        public BaseRepository(AppDbContext context)
+        public BaseService(AppDbContext context)
         {
             _context = context;
         }
-        
+
         public async Task<IEnumerable<T>> GetAllAsync()
         {
             return await _context.Set<T>().ToListAsync();
@@ -29,7 +30,7 @@ namespace modLib.Repositories
 
         public async Task<T?> GetAsync(Predicate<T> predicate)
         {
-            return await _context.Set<T>().FirstOrDefaultAsync(e => predicate(e));           
+            return await _context.Set<T>().FirstOrDefaultAsync(e => predicate(e));
         }
 
         public async Task RemoveAsync(T entity)

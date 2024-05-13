@@ -1,15 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using modLib.Models.Entities;
-using modLib.Repositories;
+using modLib.BL;
 
 namespace modLib.Controllers
 {
     [ApiController]
     public class ModController
     {       
-        private readonly ModsRepository _repository;
+        private readonly ModsService _repository;
 
-        public ModController(ModsRepository repository)
+        public ModController(ModsService repository)
         {
             _repository = repository;
         }

@@ -4,8 +4,8 @@ using modLib.Models.Entities;
 
 namespace modLib.BL
 {
-    public class BaseService<T> where T : BaseModel
-    {
+    public abstract class BaseService<T> where T : BaseModel
+    {      
         protected readonly AppDbContext _context;
 
         public BaseService(AppDbContext context)
@@ -33,21 +33,30 @@ namespace modLib.BL
             return await _context.Set<T>().FirstOrDefaultAsync(e => predicate(e));
         }
 
-        public virtual async Task RemoveAsync(T entity)
+        public virtual async Task RemoveAsync(Guid id)
         {
-            _context.Set<T>().Remove(entity);
-            await _context.SaveChangesAsync();
+            var model = await GetAsync(id);         
+            _context.Set<T>().Remove(model);
+            await _context.SaveChangesAsync();                       
         }
 
-        public virtual async Task UpdateAsync(T entity)
+        public virtual async Task<T> UpdateAsync(T model)
         {
-            _context.Set<T>().Update(entity);
+            var toUpdate = await GetAsync(model.Id);
+
+            if(toUpdate != null)
+            {
+                toUpdate = model;
+            }
+            _context.Set<T>().Update(toUpdate);
             await _context.SaveChangesAsync();
+
+            return toUpdate;
         }
 
-        public virtual async Task CreateAsync(T entity)
+        public virtual async Task CreateAsync(T model)
         {
-            await _context.Set<T>().AddAsync(entity);
+            await _context.Set<T>().AddAsync(model);
             await _context.SaveChangesAsync();
         }
     }

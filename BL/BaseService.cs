@@ -4,7 +4,7 @@ using modLib.Models.Entities;
 
 namespace modLib.BL
 {
-    public class BaseService<T> : IBaseService<T> where T : BaseModel
+    public class BaseService<T> where T : BaseModel
     {
         protected readonly AppDbContext _context;
 
@@ -13,39 +13,39 @@ namespace modLib.BL
             _context = context;
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public virtual async Task<IEnumerable<T>> GetAllAsync()
         {
-            return await _context.Set<T>().ToListAsync();
+            return await _context.Set<T>().ToListAsync();            
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync(Predicate<T> predicate)
+        public virtual async Task<IEnumerable<T>> GetAllAsync(Predicate<T> predicate)
         {
             return await _context.Set<T>().Where(e => predicate(e)).ToListAsync();
         }
 
-        public async Task<T?> GetAsync(Guid id)
+        public virtual async Task<T?> GetAsync(Guid id)
         {
             return await _context.Set<T>().FirstOrDefaultAsync(e => e.Id == id);
         }
 
-        public async Task<T?> GetAsync(Predicate<T> predicate)
+        public virtual async Task<T?> GetAsync(Predicate<T> predicate)
         {
             return await _context.Set<T>().FirstOrDefaultAsync(e => predicate(e));
         }
 
-        public async Task RemoveAsync(T entity)
+        public virtual async Task RemoveAsync(T entity)
         {
             _context.Set<T>().Remove(entity);
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(T entity)
+        public virtual async Task UpdateAsync(T entity)
         {
             _context.Set<T>().Update(entity);
             await _context.SaveChangesAsync();
         }
 
-        public async Task CreateAsync(T entity)
+        public virtual async Task CreateAsync(T entity)
         {
             await _context.Set<T>().AddAsync(entity);
             await _context.SaveChangesAsync();

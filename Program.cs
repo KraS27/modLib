@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using modLib.BL;
 using modLib.DB;
+using System.Text.Json.Serialization;
 
 namespace modLib
 {
@@ -12,9 +13,12 @@ namespace modLib
             var builder = WebApplication.CreateBuilder(args);
             var connection = builder.Configuration.GetConnectionString("DefaultConnection");
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+            });
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen();           
             builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connection));
 
             builder.Services.AddScoped<ModService>();

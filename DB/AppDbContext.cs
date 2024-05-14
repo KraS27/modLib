@@ -8,8 +8,8 @@ namespace modLib.DB
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        DbSet<ModModel> Mods { get; set; }
+        public DbSet<ModModel> Mods { get; set; }
 
-        DbSet<ModPackModel> ModPacks { get; set; }
+        public DbSet<ModPackModel> ModPacks { get; set; }
     }
 }

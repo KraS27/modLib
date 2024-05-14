@@ -7,9 +7,9 @@ namespace modLib.Controllers
     [ApiController]
     public class ModController : ControllerBase
     {       
-        private readonly ModsService _service;
+        private readonly ModService _service;
 
-        public ModController(ModsService repository)
+        public ModController(ModService repository)
         {
             _service = repository;
         }

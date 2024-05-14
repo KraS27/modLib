@@ -17,7 +17,7 @@ namespace modLib
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connection));
 
-            builder.Services.AddScoped<ModsService>();
+            builder.Services.AddScoped<ModService>();
 
             var app = builder.Build();
 

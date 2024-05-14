@@ -36,11 +36,11 @@ namespace modLib.BL
         public virtual async Task RemoveAsync(Guid id)
         {
             var model = await GetAsync(id);         
-            _context.Set<T>().Remove(model);
+            _context.Set<T>().Remove(model!);
             await _context.SaveChangesAsync();                       
         }
 
-        public virtual async Task<T> UpdateAsync(T model)
+        public virtual async Task<T?> UpdateAsync(T model)
         {
             var toUpdate = await GetAsync(model.Id);
 
@@ -48,7 +48,7 @@ namespace modLib.BL
             {
                 toUpdate = model;
             }
-            _context.Set<T>().Update(toUpdate);
+            _context.Set<T>().Update(toUpdate!);
             await _context.SaveChangesAsync();
 
             return toUpdate;

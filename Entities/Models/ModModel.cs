@@ -10,7 +10,7 @@ namespace modLib.Models.Entities
 
         public string? Path { get; set; }
 
-        public int ModPackId { get; set; }
+        public Guid ModPackId { get; set; }
         public ModPackModel? ModPack {  get; set; }
     }
 }

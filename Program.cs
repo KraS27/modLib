@@ -18,6 +18,7 @@ namespace modLib
             builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connection));
 
             builder.Services.AddScoped<ModService>();
+            builder.Services.AddScoped<ModPackService>();
 
             var app = builder.Build();
 

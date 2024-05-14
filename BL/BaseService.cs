@@ -25,7 +25,7 @@ namespace modLib.BL
 
         public virtual async Task<T?> GetAsync(Guid id)
         {
-            return await _context.Set<T>().FirstOrDefaultAsync(e => e.Id == id);
+            return await _context.Set<T>().FindAsync(id);
         }
 
         public virtual async Task<T?> GetAsync(Predicate<T> predicate)

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using modLib.BL;
+using modLib.Entities.Exceptions;
 using modLib.Models.Entities;
 
 namespace modLib.Controllers
@@ -15,7 +16,7 @@ namespace modLib.Controllers
         }
 
         [HttpGet("mods/{id}")]
-        public async Task<IActionResult> GetMod(Guid id)
+        public async Task<IActionResult> GetMod(int id)
         {
             try
             {
@@ -53,6 +54,10 @@ namespace modLib.Controllers
 
                 return Ok(modModel.Id);
             }
+            catch (AlreadyExistException)
+            {
+                return BadRequest("Mod with that name or id already exist");
+            }
             catch
             {
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
@@ -60,7 +65,7 @@ namespace modLib.Controllers
         }
 
         [HttpDelete("mods/{id}")]
-        public async Task<IActionResult> RemoveMod(Guid id)
+        public async Task<IActionResult> RemoveMod(int id)
         {
             try
             {

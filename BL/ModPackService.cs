@@ -9,7 +9,7 @@ namespace modLib.BL
     {
         public ModPackService(AppDbContext context) : base(context) { }
 
-        public override async Task<ModPackModel?> GetAsync(Guid id)
+        public async Task<ModPackModel?> GetWithModsAsync(int id)
         {
             return await _context.ModPacks.Include(x => x.Mods).FirstOrDefaultAsync(x => x.Id == id);
         }

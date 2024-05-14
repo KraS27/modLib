@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using modLib.DB;
+using modLib.Entities.Exceptions;
 using modLib.Models.Entities;
 
 namespace modLib.BL
@@ -23,17 +24,12 @@ namespace modLib.BL
             return await _context.Set<T>().Where(e => predicate(e)).ToListAsync();
         }
 
-        public virtual async Task<T?> GetAsync(Guid id)
+        public virtual async Task<T?> GetAsync(int id)
         {
             return await _context.Set<T>().FindAsync(id);
-        }
+        }      
 
-        public virtual async Task<T?> GetAsync(Predicate<T> predicate)
-        {
-            return await _context.Set<T>().FirstOrDefaultAsync(e => predicate(e));
-        }
-
-        public virtual async Task RemoveAsync(Guid id)
+        public virtual async Task RemoveAsync(int id)
         {
             var model = await GetAsync(id);         
             _context.Set<T>().Remove(model!);
@@ -56,6 +52,11 @@ namespace modLib.BL
 
         public virtual async Task CreateAsync(T model)
         {
+            var existModel = await GetAsync(model.Id);
+
+            if (existModel != null)
+                throw new AlreadyExistException();
+
             await _context.Set<T>().AddAsync(model);
             await _context.SaveChangesAsync();
         }

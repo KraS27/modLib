@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using modLib.BL;
+using modLib.Entities.Exceptions;
 using modLib.Entities.Models;
 using modLib.Models.Entities;
 
@@ -17,11 +18,11 @@ namespace modLib.Controllers
         }
 
         [HttpGet("modPacks/{id}")]
-        public async Task<IActionResult> GetModPack(Guid id)
+        public async Task<IActionResult> GetModPack(int id)
         {
             try
             {
-                var mod = await _service.GetAsync(id);
+                var mod = await _service.GetWithModsAsync(id);
 
                 return mod is null ? NoContent() : Ok(mod);
             }
@@ -55,9 +56,9 @@ namespace modLib.Controllers
 
                 return Ok(modPackModel.Id);
             }
-            catch (DbUpdateException)
+            catch (AlreadyExistException)
             {
-                return BadRequest("ModPack with that name already exist");
+                return BadRequest("ModPack with that name or id already exist");
             }
             catch
             {
@@ -66,7 +67,7 @@ namespace modLib.Controllers
         }
 
         [HttpDelete("modPacks/{id}")]
-        public async Task<IActionResult> RemoveModPack(Guid id)
+        public async Task<IActionResult> RemoveModPack(int id)
         {
             try
             {

@@ -11,7 +11,7 @@ namespace modLib.BL
 
         public async Task<ModPackModel?> GetWithModsAsync(int id)
         {
-            return await _context.ModPacks.Include(x => x.Mods).FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.ModPacks.Include(x => x.ModModPacks).FirstOrDefaultAsync(x => x.Id == id);
         }
     }
 }

@@ -11,7 +11,7 @@ using modLib.DB;
 namespace modLib.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240514173334_Init")]
+    [Migration("20240515120421_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -24,68 +24,101 @@ namespace modLib.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("modLib.Entities.Models.ModPackModel", b =>
+            modelBuilder.Entity("modLib.DB.Relationships.ModModPack", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("ModId")
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ModPacks");
-                });
-
-            modelBuilder.Entity("modLib.Models.Entities.ModModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ModPackId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Path")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
+                    b.HasKey("ModId", "ModPackId");
 
                     b.HasIndex("ModPackId");
 
-                    b.ToTable("Mods");
+                    b.ToTable("mod_modPack", (string)null);
+                });
+
+            modelBuilder.Entity("modLib.Entities.Models.ModPackModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("description");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("modPacks", (string)null);
                 });
 
             modelBuilder.Entity("modLib.Models.Entities.ModModel", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("description");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)")
+                        .HasColumnName("name");
+
+                    b.Property<string>("Path")
+                        .HasMaxLength(120)
+                        .HasColumnType("nvarchar(120)")
+                        .HasColumnName("path");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("mods", (string)null);
+                });
+
+            modelBuilder.Entity("modLib.DB.Relationships.ModModPack", b =>
+                {
+                    b.HasOne("modLib.Models.Entities.ModModel", "Mod")
+                        .WithMany("ModModPacks")
+                        .HasForeignKey("ModId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("modLib.Entities.Models.ModPackModel", "ModPack")
-                        .WithMany("Mods")
+                        .WithMany("ModModPacks")
                         .HasForeignKey("ModPackId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Mod");
 
                     b.Navigation("ModPack");
                 });
 
             modelBuilder.Entity("modLib.Entities.Models.ModPackModel", b =>
                 {
-                    b.Navigation("Mods");
+                    b.Navigation("ModModPacks");
+                });
+
+            modelBuilder.Entity("modLib.Models.Entities.ModModel", b =>
+                {
+                    b.Navigation("ModModPacks");
                 });
 #pragma warning restore 612, 618
         }

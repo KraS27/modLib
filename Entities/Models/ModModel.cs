@@ -1,4 +1,5 @@
-﻿using modLib.Entities.Models;
+﻿using modLib.DB.Relationships;
+using modLib.Entities.Models;
 
 namespace modLib.Models.Entities
 {
@@ -10,7 +11,6 @@ namespace modLib.Models.Entities
 
         public string? Path { get; set; }
 
-        public int ModPackId { get; set; }
-        public ModPackModel? ModPack {  get; set; }
+        public List<ModModPack> ModModPacks { get; set; } = new List<ModModPack>();
     }
 }

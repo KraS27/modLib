@@ -11,8 +11,9 @@ namespace modLib.DB.Configurations
             builder.ToTable("modPacks");
 
             builder.HasKey(x => x.Id);
-           
-            builder.Property(x => x.Name).IsRequired().HasMaxLength(64);
+
+            builder.Property(x => x.Id).IsRequired().HasColumnName("id");
+            builder.Property(x => x.Name).IsRequired().HasMaxLength(64).HasColumnName("name");
             builder.Property(x => x.Description).HasColumnName("description");                        
         }
     }

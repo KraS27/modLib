@@ -57,7 +57,7 @@ namespace modLib.Controllers
             }
             catch (AlreadyExistException)
             {
-                return BadRequest("Mod with that name or id already exist");
+                return BadRequest("Mod with that name already exist");
             }
             catch
             {

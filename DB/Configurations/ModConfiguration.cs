@@ -4,7 +4,7 @@ using modLib.Models.Entities;
 
 namespace modLib.DB.Configurations
 {
-    public class ModModelConfiguration : IEntityTypeConfiguration<ModModel>
+    public class ModConfiguration : IEntityTypeConfiguration<ModModel>
     {
         public void Configure(EntityTypeBuilder<ModModel> builder)
         {
@@ -15,7 +15,11 @@ namespace modLib.DB.Configurations
             builder.Property(x => x.Id).IsRequired().HasColumnName("id");
             builder.Property(x => x.Name).HasMaxLength(60).IsRequired().HasColumnName("name");
             builder.Property(x => x.Description).HasColumnName("description");
-            builder.Property(x => x.Path).HasMaxLength(120).HasColumnName("path");   
+            builder.Property(x => x.Path).HasMaxLength(120).HasColumnName("path");
+
+            builder.HasOne(x => x.Game)
+                .WithMany(x => x.Mods)
+                .HasForeignKey(x => x.GameId);
         }
     }
 }

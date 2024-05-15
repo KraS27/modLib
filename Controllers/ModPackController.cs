@@ -12,9 +12,9 @@ namespace modLib.Controllers
     {
         private readonly ModPackService _service;
 
-        public ModPackController(ModPackService repository)
+        public ModPackController(ModPackService service)
         {
-            _service = repository;
+            _service = service;
         }
 
         [HttpGet("modPacks/{id}")]

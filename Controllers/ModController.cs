@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using modLib.BL;
+using modLib.Entities.DTO.Mods;
 using modLib.Entities.Exceptions;
 using modLib.Models.Entities;
 
@@ -46,13 +47,13 @@ namespace modLib.Controllers
         }
 
         [HttpPost("mods")]
-        public async Task<IActionResult> AddMod([FromBody] ModModel modModel)
+        public async Task<IActionResult> AddMod([FromBody] CreateModDTO modModel)
         {
             try
             {
                 await _service.CreateAsync(modModel);
 
-                return Ok(modModel.Id);
+                return Ok(modModel);
             }
             catch (AlreadyExistException)
             {

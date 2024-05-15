@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using modLib.DB;
+using modLib.Entities.DTO.Mods;
 using modLib.Entities.Exceptions;
 using modLib.Models.Entities;
 
@@ -9,14 +10,16 @@ namespace modLib.BL
     {
         public ModService(AppDbContext context) : base(context) { }
 
-        public async override Task CreateAsync(ModModel model)
+        public async Task CreateAsync(CreateModDTO createModel)
         {
-            var check = await _context.Mods.FirstOrDefaultAsync(x => x.Id == model.Id || x.Name.ToLower() == model.Name.ToLower());
+            var check = await _context.Mods.FirstOrDefaultAsync(m => m.Name == createModel.Name);
 
             if (check != null)
                 throw new AlreadyExistException();
 
-            await _context.Mods.AddAsync(model);
+            var mod = new ModModel { Name = createModel.Name, Description = createModel.Description, Path = createModel.Path };
+
+            await _context.Mods.AddAsync(mod);
             await _context.SaveChangesAsync();
         }
     }

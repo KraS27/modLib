@@ -17,12 +17,7 @@ namespace modLib.BL
         public virtual async Task<IEnumerable<T>> GetAllAsync()
         {
             return await _context.Set<T>().ToListAsync();            
-        }
-
-        public virtual async Task<IEnumerable<T>> GetAllAsync(Predicate<T> predicate)
-        {
-            return await _context.Set<T>().Where(e => predicate(e)).ToListAsync();
-        }
+        }       
 
         public virtual async Task<T?> GetAsync(int id)
         {
@@ -52,11 +47,6 @@ namespace modLib.BL
 
         public virtual async Task CreateAsync(T model)
         {
-            var existModel = await GetAsync(model.Id);
-
-            if (existModel != null)
-                throw new AlreadyExistException();
-
             await _context.Set<T>().AddAsync(model);
             await _context.SaveChangesAsync();
         }

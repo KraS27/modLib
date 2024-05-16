@@ -32,5 +32,21 @@ namespace modLib.BL
             await _context.Mods.AddAsync(newMod);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<GetModDTO>> GetAllWithGamesAsync()
+        {
+            var mods = await _context.Mods.Include(m => m.Game).ToListAsync();
+
+            var modsGetDTO = mods.Select(m => new GetModDTO
+            {
+                Id = m.Id,
+                Name = m.Name,
+                Description = m.Description,
+                Path = m.Path,
+                Game = m.Game!.Name
+            });
+
+            return modsGetDTO;
+        }
     }
 }

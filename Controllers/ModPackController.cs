@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using modLib.BL;
+using modLib.Entities.DTO.ModPacks;
 using modLib.Entities.Exceptions;
 using modLib.Entities.Models;
 using modLib.Models.Entities;
@@ -22,7 +23,7 @@ namespace modLib.Controllers
         {
             try
             {
-                var mod = await _service.GetWithModsAsync(id);
+                var mod = await _service.GetAsync(id);
 
                 return mod is null ? NoContent() : Ok(mod);
             }
@@ -48,17 +49,21 @@ namespace modLib.Controllers
         }
 
         [HttpPost("modPacks")]
-        public async Task<IActionResult> AddModPack([FromBody] ModPackModel modPackModel)
+        public async Task<IActionResult> AddModPack([FromBody] CreateModPackDTO modPackDTO)
         {
             try
             {
-                await _service.CreateAsync(modPackModel);
+                await _service.CreateAsync(modPackDTO);
 
-                return Ok(modPackModel.Id);
+                return Ok();
             }
-            catch (AlreadyExistException)
+            catch (AlreadyExistException ex)
             {
-                return BadRequest("ModPack with that name or id already exist");
+                return BadRequest(ex.Message);
+            }
+            catch (ForeignKeyException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch
             {

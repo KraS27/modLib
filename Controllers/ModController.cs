@@ -48,13 +48,13 @@ namespace modLib.Controllers
         }
 
         [HttpPost("mods")]
-        public async Task<IActionResult> AddMod([FromBody] CreateModDTO modModel)
+        public async Task<IActionResult> AddMod([FromBody] CreateModDTO modDTO)
         {
             try
             {
-                await _service.CreateAsync(modModel);
+                await _service.CreateAsync(modDTO);
 
-                return Ok(modModel);
+                return Ok();
             }
             catch (AlreadyExistException ex )
             {

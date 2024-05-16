@@ -7,5 +7,7 @@
         public string? Description { get; set; }
 
         public string? Path { get; set; }
+
+        public int GameId { get; set; }
     }
 }

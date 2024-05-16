@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using modLib.BL;
 using modLib.Entities.DTO.Mods;
 using modLib.Entities.Exceptions;
@@ -55,9 +56,13 @@ namespace modLib.Controllers
 
                 return Ok(modModel);
             }
-            catch (AlreadyExistException)
+            catch (AlreadyExistException ex )
             {
-                return BadRequest("Mod with that name already exist");
+                return BadRequest(ex.Message);
+            }
+            catch (ForeignKeyException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch
             {

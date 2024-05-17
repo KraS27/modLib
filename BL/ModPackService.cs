@@ -67,5 +67,25 @@ namespace modLib.BL
 
             return modPacks;
         }
+        
+        public async Task<GetModPackDTO> GetDTOAsync(int id)
+        {
+            var modPackDTO = await _context.ModPacks
+                .Where(m => m.Id == id)
+                .Select(mp => new GetModPackDTO
+                {
+                    Id = mp.Id,
+                    Name = mp.Name,
+                    Description = mp.Description,
+                    Game = mp.Game!.Name,
+                    ModCount = mp.ModModPacks!.Count(),
+                    ModNames = mp.ModModPacks!.Select(x => x.Mod!.Name).ToList()
+                }).FirstOrDefaultAsync();
+
+            if (modPackDTO == null)
+                throw new NotFoundException($"modPack with id: {id} Not Found");
+
+            return modPackDTO;
+        }
     }
 }

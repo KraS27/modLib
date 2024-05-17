@@ -24,9 +24,13 @@ namespace modLib.Controllers
         {
             try
             {
-                var mod = await _service.GetAsync(id);
+                var mod = await _service.GetDTOAsync(id);
 
-                return mod is null ? NoContent() : Ok(mod);
+                return Ok(mod);
+            }
+            catch(NotFoundException ex)
+            { 
+                return Ok(ex.Message);
             }
             catch
             {

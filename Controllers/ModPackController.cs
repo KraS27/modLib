@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using modLib.BL;
+using modLib.DB.Relationships;
 using modLib.Entities.DTO.ModPacks;
 using modLib.Entities.Exceptions;
 using modLib.Entities.Models;
@@ -109,5 +110,22 @@ namespace modLib.Controllers
             }
         }
 
+        [HttpPost("modPacks/addMod")]
+        public async Task<IActionResult> AddModToModPack([FromBody] ModModPack relation)
+        {
+            try
+            {
+                await _service.AddModToModPack(relation.ModPackId, relation.ModId);
+                return Ok();
+            }
+            catch(ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+        }
     }
 }

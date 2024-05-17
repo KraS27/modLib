@@ -1,14 +1,17 @@
 ﻿using modLib.Entities.Models;
 using modLib.Models.Entities;
+using System.Text.Json.Serialization;
 
 namespace modLib.DB.Relationships
 {
     public class ModModPack
     {
         public int ModId { get; set; }
-        public ModModel Mod { get; set; } = new ModModel();
+        [JsonIgnore]
+        public ModModel? Mod { get; set; }
 
         public int ModPackId { get; set; }
-        public ModPackModel ModPack { get; set; } = new ModPackModel();
+        [JsonIgnore]
+        public ModPackModel? ModPack { get; set; }
     }
 }

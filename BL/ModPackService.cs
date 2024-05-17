@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using modLib.DB;
+using modLib.DB.Relationships;
 using modLib.Entities.DTO.ModPacks;
 using modLib.Entities.Exceptions;
 using modLib.Entities.Models;
@@ -30,6 +31,22 @@ namespace modLib.BL
             };
 
             await _context.AddAsync(newModPack);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task AddModToModPack(int modPackId, int modId)
+        {
+            var mod = await _context.Mods.FindAsync(modId);
+            var modPack = await _context.ModPacks.FindAsync(modPackId);
+
+            if (mod == null)
+                throw new ArgumentNullException($"Mod with id: {modId} Not Found");
+            if (modPack == null)
+                throw new ArgumentNullException($"ModPack with id: {modPackId} Not Found");
+
+            var relation = new ModModPack { ModId = modId, ModPackId =  modPackId };
+
+            await _context.AddAsync(relation);
             await _context.SaveChangesAsync();
         }
     }

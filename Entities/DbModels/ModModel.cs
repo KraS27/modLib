@@ -15,6 +15,6 @@ namespace modLib.Models.Entities
         public int GameId { get; set; }
         public GameModel? Game { get; set; }
 
-        public List<ModModPack>? ModModPacks { get; set; } = new List<ModModPack>();
+        public List<ModModPack>? ModModPacks { get; set; }
     }
 }

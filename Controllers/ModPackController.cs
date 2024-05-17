@@ -122,6 +122,10 @@ namespace modLib.Controllers
             {
                 return BadRequest(ex.Message);
             }
+            catch(AlreadyExistException ex)
+            {
+                return BadRequest(ex.Message);
+            }
             catch
             {
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);

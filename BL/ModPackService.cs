@@ -30,7 +30,7 @@ namespace modLib.BL
                 GameId = game.Id,
             };
 
-            await _context.AddAsync(newModPack);
+            await _context.ModPacks.AddAsync(newModPack);
             await _context.SaveChangesAsync();
         }
 
@@ -44,9 +44,13 @@ namespace modLib.BL
             if (modPack == null)
                 throw new ArgumentNullException($"ModPack with id: {modPackId} Not Found");
 
-            var relation = new ModModPack { ModId = modId, ModPackId =  modPackId };
+            var newRelation = new ModModPack { ModId = modId, ModPackId =  modPackId };
 
-            await _context.AddAsync(relation);
+            var relation = await _context.ModModPacks.FirstOrDefaultAsync(m => m.ModPackId == modPackId || m.ModId == modId);
+            if (relation != null)
+                throw new AlreadyExistException($"Mod with id: {modId} already added to modPack with id: {modPackId}");
+
+            await _context.ModModPacks.AddAsync(newRelation);
             await _context.SaveChangesAsync();
         }
     }

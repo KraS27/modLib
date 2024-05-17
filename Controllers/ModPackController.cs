@@ -39,7 +39,7 @@ namespace modLib.Controllers
         {
             try
             {
-                var mods = await _service.GetAllAsync();
+                var mods = await _service.GetAllDTOAsync();
 
                 return Ok(mods);
             }

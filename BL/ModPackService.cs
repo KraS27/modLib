@@ -46,12 +46,26 @@ namespace modLib.BL
 
             var newRelation = new ModModPack { ModId = modId, ModPackId =  modPackId };
 
-            var relation = await _context.ModModPacks.FirstOrDefaultAsync(m => m.ModPackId == modPackId || m.ModId == modId);
+            var relation = await _context.ModModPacks.FirstOrDefaultAsync(m => m.ModPackId == modPackId && m.ModId == modId);
             if (relation != null)
                 throw new AlreadyExistException($"Mod with id: {modId} already added to modPack with id: {modPackId}");
 
             await _context.ModModPacks.AddAsync(newRelation);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<GetModPacksDTO>> GetAllDTOAsync()
+        {
+            var modPacks = await _context.ModPacks.Select(m => new GetModPacksDTO
+            {
+                Id = m.Id,
+                Name = m.Name,
+                Description = m.Description,
+                Game = m.Game!.Name,
+                ModsCount = m.ModModPacks!.Count()
+            }) .ToListAsync();
+
+            return modPacks;
         }
     }
 }

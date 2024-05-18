@@ -24,6 +24,7 @@ namespace modLib
             builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connection));
 
             builder.Services.AddTransient<IValidator<CreateModDTO>, CreateModDTOValidator>();
+            builder.Services.AddTransient<IValidator<UpdateModDTO>, UpdateModDTOValidator>();
 
             builder.Services.AddScoped<ModService>();
             builder.Services.AddScoped<ModPackService>();

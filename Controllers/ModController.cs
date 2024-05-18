@@ -13,11 +13,15 @@ namespace modLib.Controllers
     {       
         private readonly ModService _service;
         private readonly IValidator<CreateModDTO> _createModDTOValidator;
+        private readonly IValidator<UpdateModDTO> _updateModDTOValidator;
 
-        public ModController(ModService repository, IValidator<CreateModDTO> createModDTOValidator)
+        public ModController(ModService repository, 
+            IValidator<CreateModDTO> createModDTOValidator, 
+            IValidator<UpdateModDTO> updateModDTOValidator)
         {
             _service = repository;
             _createModDTOValidator = createModDTOValidator;
+            _updateModDTOValidator = updateModDTOValidator;
         }
 
         [HttpGet("mods/{id}")]
@@ -56,12 +60,9 @@ namespace modLib.Controllers
             try
             {
                 var validationResult = _createModDTOValidator.Validate(modDTO);
-                if (!validationResult.IsValid)
-                {
-                    var errors = validationResult.Errors.Select(e => e.ErrorMessage);
-
-                    return BadRequest(errors);
-                }
+                if (!validationResult.IsValid)             
+                    return BadRequest(validationResult.Errors.Select(e => e.ErrorMessage));
+                
                    
                 await _service.CreateAsync(modDTO);
 
@@ -101,11 +102,15 @@ namespace modLib.Controllers
         }
 
         [HttpPut("mods")]
-        public async Task<IActionResult> UpdateMod([FromBody] ModModel modModel)
+        public async Task<IActionResult> UpdateMod([FromBody] UpdateModDTO modModel)
         {
             try
             {
-                await _service.UpdateAsync(modModel);
+                var validationResult = _updateModDTOValidator.Validate(modModel);
+                if (!validationResult.IsValid)
+                    return BadRequest(validationResult.Errors.Select(e => e.ErrorMessage));
+
+                await _service.UpdateDTOAsync(modModel);
 
                 return Ok();
             }

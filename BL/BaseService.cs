@@ -37,11 +37,11 @@ namespace modLib.BL
 
             if(toUpdate != null)
             {
-                toUpdate = model;
-            }
-            _context.Set<T>().Update(toUpdate!);
-            await _context.SaveChangesAsync();
+                _context.Entry(toUpdate).CurrentValues.SetValues(model);
 
+                await _context.SaveChangesAsync();
+            }
+            
             return toUpdate;
         }
 

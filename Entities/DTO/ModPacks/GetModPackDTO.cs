@@ -10,7 +10,7 @@
 
         public string Game { get; set; } = string.Empty;
 
-        public List<string> ModNames { get; set; } = new();
+        public List<string> Mods { get; set; } = new();
 
         public int ModCount { get; set; }
     }

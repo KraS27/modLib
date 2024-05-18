@@ -79,7 +79,7 @@ namespace modLib.BL
                     Description = mp.Description,
                     Game = mp.Game!.Name,
                     ModCount = mp.ModModPacks!.Count(),
-                    ModNames = mp.ModModPacks!.Select(x => x.Mod!.Name).ToList()
+                    Mods = mp.ModModPacks!.Select(x => x.Mod!.Name).ToList()
                 }).FirstOrDefaultAsync();
 
             if (modPackDTO == null)

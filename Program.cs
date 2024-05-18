@@ -1,7 +1,9 @@
-
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using modLib.BL;
 using modLib.DB;
+using modLib.Entities.DTO.Mods;
+using modLib.Validators.Mod;
 using System.Text.Json.Serialization;
 
 namespace modLib
@@ -20,6 +22,8 @@ namespace modLib
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();           
             builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connection));
+
+            builder.Services.AddTransient<IValidator<CreateModDTO>, CreateModDTOValidator>();
 
             builder.Services.AddScoped<ModService>();
             builder.Services.AddScoped<ModPackService>();

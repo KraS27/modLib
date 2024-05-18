@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using modLib.BL;
 using modLib.Entities.DTO.Mods;
@@ -11,10 +12,12 @@ namespace modLib.Controllers
     public class ModController : ControllerBase
     {       
         private readonly ModService _service;
+        private readonly IValidator<CreateModDTO> _createModDTOValidator;
 
-        public ModController(ModService repository)
+        public ModController(ModService repository, IValidator<CreateModDTO> createModDTOValidator)
         {
             _service = repository;
+            _createModDTOValidator = createModDTOValidator;
         }
 
         [HttpGet("mods/{id}")]
@@ -52,6 +55,14 @@ namespace modLib.Controllers
         {
             try
             {
+                var validationResult = _createModDTOValidator.Validate(modDTO);
+                if (!validationResult.IsValid)
+                {
+                    var errors = validationResult.Errors.Select(e => e.ErrorMessage);
+
+                    return BadRequest(errors);
+                }
+                   
                 await _service.CreateAsync(modDTO);
 
                 return Ok();

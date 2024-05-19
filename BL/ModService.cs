@@ -62,16 +62,25 @@ namespace modLib.BL
 
         public async Task CreateRangeAsync(List<CreateModDTO> createModels)
         {
+            var modNames = createModels.Select(m => m.Name).ToList();
+            var gameIds = createModels.Select(m => m.GameId).ToList();
+
+            var existingMods = await _context.Mods
+                .Where(m => modNames.Contains(m.Name))
+                .ToListAsync();
+
+            var existingGames = await _context.Games
+                .Where(g => gameIds.Contains(g.Id))
+                .Select(g => g.Id)
+                .ToListAsync();
+
+            if (existingMods.Any())
+                throw new AlreadyExistException($"Mods with names: {String.Join(", ", existingMods.Select(x => x.Name))} already exist");
+
             foreach(var model in createModels)
             {
-                var mod = await _context.Mods.FirstOrDefaultAsync(m => m.Name == model.Name);
-                var game = await _context.Games.FindAsync(model.GameId);
-
-                if (mod != null)
-                    throw new AlreadyExistException($"Mod with name: {mod.Name} already exist");
-
-                if (game == null)
-                    throw new ForeignKeyException($"Game with id: {model.GameId} not foud");
+                if(!existingGames.Contains(model.GameId))
+                    throw new ForeignKeyException($"Game with id: {model.GameId} not found");
             }
 
             var newMods = createModels.Select(m => new ModModel
@@ -80,8 +89,8 @@ namespace modLib.BL
                 Description = m.Description,
                 Path = m.Path,
                 GameId = m.GameId
-            });
-
+            }).ToList();
+         
             await _context.Mods.AddRangeAsync(newMods);
             await _context.SaveChangesAsync();
         }

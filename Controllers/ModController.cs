@@ -15,14 +15,17 @@ namespace modLib.Controllers
         private readonly ModService _service;
         private readonly IValidator<CreateModDTO> _createModDTOValidator;
         private readonly IValidator<UpdateModDTO> _updateModDTOValidator;
+        private readonly ILogger<ModController> _logger;
 
-        public ModController(ModService repository, 
-            IValidator<CreateModDTO> createModDTOValidator, 
-            IValidator<UpdateModDTO> updateModDTOValidator)
+        public ModController(ModService repository,
+            IValidator<CreateModDTO> createModDTOValidator,
+            IValidator<UpdateModDTO> updateModDTOValidator,
+            ILogger<ModController> logger)
         {
             _service = repository;
             _createModDTOValidator = createModDTOValidator;
             _updateModDTOValidator = updateModDTOValidator;
+            _logger = logger;
         }
 
         [HttpGet("mods/{id}")]
@@ -34,10 +37,11 @@ namespace modLib.Controllers
 
                 return mod is null ? NoContent() : Ok(mod);
             }
-            catch 
+            catch (Exception ex)
             {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-            }           
+                _logger.LogError(ex, "An unexpected error occurred while adding mods.");
+                return StatusCode(StatusCodes.Status500InternalServerError, new { error = "An unexpected error occurred. Please try again later." });
+            }
         }
 
         [HttpGet("mods")]
@@ -49,22 +53,22 @@ namespace modLib.Controllers
 
                 return Ok(mods);
             }
-            catch
+            catch (Exception ex)
             {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-            }               
+                _logger.LogError(ex, "An unexpected error occurred while adding mods.");
+                return StatusCode(StatusCodes.Status500InternalServerError, new { error = "An unexpected error occurred. Please try again later." });
+            }
         }
 
         [HttpPost("mods")]
         public async Task<IActionResult> AddMod([FromBody] CreateModDTO modDTO)
         {
+            var validationResult = await _createModDTOValidator.ValidateAsync(modDTO);
+            if (!validationResult.IsValid)
+                return BadRequest(validationResult.Errors.Select(e => e.ErrorMessage));
+
             try
-            {
-                var validationResult = await _createModDTOValidator.ValidateAsync(modDTO);
-                if (!validationResult.IsValid)             
-                    return BadRequest(validationResult.Errors.Select(e => e.ErrorMessage));
-                
-                   
+            {                                                
                 await _service.CreateAsync(modDTO);
 
                 return Ok();
@@ -77,39 +81,44 @@ namespace modLib.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            catch
+            catch (Exception ex)
             {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-            }            
+                _logger.LogError(ex, "An unexpected error occurred while adding mods.");
+                return StatusCode(StatusCodes.Status500InternalServerError, new { error = "An unexpected error occurred. Please try again later." });
+            }
         }
 
         [HttpPost("mods/range")]
         public async Task<IActionResult> AddMods([FromBody] List<CreateModDTO> modsDTO)
         {
+            var validationResults = modsDTO.Select(dto => _createModDTOValidator.Validate(dto)).ToList();
+
+            var validationErrors = validationResults
+                .Where(result => !result.IsValid)
+                .SelectMany(result => result.Errors)
+                .Select(error => error.ErrorMessage)
+                .ToList();
+
+            if (validationErrors.Any())            
+                return BadRequest(validationErrors);
+            
             try
-            {
-                var validationResults = modsDTO.Select(x => _createModDTOValidator.Validate(x)).ToList();
-
-                foreach(var validationResult in validationResults)
-                {
-                    if(!validationResult.IsValid)
-                        return BadRequest(validationResult.Errors.Select(e => e.ErrorMessage));
-                }
-
+            {                              
                 await _service.CreateRangeAsync(modsDTO);
                 return Ok();
             }
             catch (AlreadyExistException ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new { error = ex.Message });
             }
             catch (ForeignKeyException ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new { error = ex.Message });
             }
-            catch
+            catch (Exception ex)
             {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+                _logger.LogError(ex, "An unexpected error occurred while adding mods.");
+                return StatusCode(StatusCodes.Status500InternalServerError, new { error = "An unexpected error occurred. Please try again later." });
             }
         }
 
@@ -126,10 +135,11 @@ namespace modLib.Controllers
             {
                 return NotFound();
             }
-            catch
+            catch (Exception ex)
             {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-            }         
+                _logger.LogError(ex, "An unexpected error occurred while adding mods.");
+                return StatusCode(StatusCodes.Status500InternalServerError, new { error = "An unexpected error occurred. Please try again later." });
+            }
         }
 
         [HttpPut("mods")]
@@ -149,9 +159,10 @@ namespace modLib.Controllers
             {
                 return NotFound();
             }
-            catch
+            catch (Exception ex)
             {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+                _logger.LogError(ex, "An unexpected error occurred while adding mods.");
+                return StatusCode(StatusCodes.Status500InternalServerError, new { error = "An unexpected error occurred. Please try again later." });
             }
         }
     }

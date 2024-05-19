@@ -96,7 +96,7 @@ namespace modLib.Controllers
             var validationErrors = validationResults
                 .Where(result => !result.IsValid)
                 .SelectMany(result => result.Errors)
-                .Select(error => error.ErrorMessage)
+                .Select(error => new {Value = error.AttemptedValue, Error = error.ErrorMessage})
                 .ToList();
 
             if (validationErrors.Any())            

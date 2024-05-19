@@ -59,5 +59,31 @@ namespace modLib.BL
             _context.Entry(toUpdate).CurrentValues.SetValues(updateDTO);
             await _context.SaveChangesAsync();
         }
+
+        public async Task CreateRangeAsync(List<CreateModDTO> createModels)
+        {
+            foreach(var model in createModels)
+            {
+                var mod = await _context.Mods.FirstOrDefaultAsync(m => m.Name == model.Name);
+                var game = await _context.Games.FindAsync(model.GameId);
+
+                if (mod != null)
+                    throw new AlreadyExistException($"Mod with name: {mod.Name} already exist");
+
+                if (game == null)
+                    throw new ForeignKeyException($"Game with id: {model.GameId} not foud");
+            }
+
+            var newMods = createModels.Select(m => new ModModel
+            {
+                Name = m.Name,
+                Description = m.Description,
+                Path = m.Path,
+                GameId = m.GameId
+            });
+
+            await _context.Mods.AddRangeAsync(newMods);
+            await _context.SaveChangesAsync();
+        }
     }
 }

@@ -48,14 +48,14 @@ namespace modLib.BL
             return modsGetDTO;
         }
 
-        public async Task UpdateDTOAsync(UpdateModDTO updateDTO)
+        public async Task UpdateAsync(UpdateModDTO updateModel)
         {
-            var toUpdate = await _context.Mods.FindAsync(updateDTO.Id);
+            var toUpdate = await _context.Mods.FindAsync(updateModel.Id);
 
             if (toUpdate == null)
-                throw new NotFoundException($"Mod with id: {updateDTO.Id} NOT FOUND");
+                throw new NotFoundException($"Mod with id: {updateModel.Id} NOT FOUND");
 
-            _context.Entry(toUpdate).CurrentValues.SetValues(updateDTO);
+            _context.Entry(toUpdate).CurrentValues.SetValues(updateModel);
             await _context.SaveChangesAsync();
         }
 

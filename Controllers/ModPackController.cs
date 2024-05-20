@@ -17,11 +17,13 @@ namespace modLib.Controllers
         private readonly ILogger<ModController> _logger;
         private readonly IValidator<CreateModPackDTO> _createModPackvalidator;
 
-        public ModPackController(ModPackService service, 
-            ILogger<ModController> logger)
+        public ModPackController(ModPackService service,
+            ILogger<ModController> logger,
+            IValidator<CreateModPackDTO> createModPackvalidator)
         {
             _service = service;
             _logger = logger;
+            _createModPackvalidator = createModPackvalidator;
         }
 
         [HttpGet("modPacks/{id}")]
@@ -66,7 +68,7 @@ namespace modLib.Controllers
             var validationResult = _createModPackvalidator.Validate(modPackDTO);
 
             if (!validationResult.IsValid)
-                return BadRequest(BadRequest(validationResult.Errors.Select(e => e.ErrorMessage)));
+                return BadRequest(validationResult.Errors.Select(e => e.ErrorMessage));
 
             try
             {
@@ -110,7 +112,7 @@ namespace modLib.Controllers
         }
 
         [HttpPut("modPacks")]
-        public async Task<IActionResult> UpdateModPack([FromBody] ModPackModel modPackModel)
+        public async Task<IActionResult> UpdateModPack([FromBody] UpdateModPackDTO modPackModel)
         {
             try
             {

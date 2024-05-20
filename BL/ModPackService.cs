@@ -87,5 +87,16 @@ namespace modLib.BL
 
             return modPackDTO;
         }
+
+        public async Task UpdateAsync(UpdateModPackDTO updateModel)
+        {
+            var toUpate = await _context.ModPacks.FindAsync(updateModel.Id);
+
+            if (toUpate == null)
+                throw new NotFoundException($"ModPack with id: {updateModel.Id} NOT FOUND");
+
+            _context.Entry(toUpate).CurrentValues.SetValues(updateModel);
+            await _context.SaveChangesAsync();
+        }
     }
 }

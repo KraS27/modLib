@@ -151,7 +151,7 @@ namespace modLib.Controllers
                 if (!validationResult.IsValid)
                     return BadRequest(validationResult.Errors.Select(e => e.ErrorMessage));
 
-                await _service.UpdateDTOAsync(modModel);
+                await _service.UpdateAsync(modModel);
 
                 return Ok();
             }

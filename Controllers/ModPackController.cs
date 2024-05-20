@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using modLib.BL;
 using modLib.DB.Relationships;
@@ -14,6 +15,7 @@ namespace modLib.Controllers
     {
         private readonly ModPackService _service;
         private readonly ILogger<ModController> _logger;
+        private readonly IValidator<CreateModPackDTO> _createModPackvalidator;
 
         public ModPackController(ModPackService service, 
             ILogger<ModController> logger)
@@ -61,6 +63,11 @@ namespace modLib.Controllers
         [HttpPost("modPacks")]
         public async Task<IActionResult> AddModPack([FromBody] CreateModPackDTO modPackDTO)
         {
+            var validationResult = _createModPackvalidator.Validate(modPackDTO);
+
+            if (!validationResult.IsValid)
+                return BadRequest(BadRequest(validationResult.Errors.Select(e => e.ErrorMessage)));
+
             try
             {
                 await _service.CreateAsync(modPackDTO);

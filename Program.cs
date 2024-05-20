@@ -2,8 +2,10 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using modLib.BL;
 using modLib.DB;
+using modLib.Entities.DTO.ModPacks;
 using modLib.Entities.DTO.Mods;
 using modLib.Validators.Mod;
+using modLib.Validators.ModPack;
 using System.Text.Json.Serialization;
 
 namespace modLib
@@ -25,6 +27,7 @@ namespace modLib
 
             builder.Services.AddTransient<IValidator<CreateModDTO>, CreateModDTOValidator>();
             builder.Services.AddTransient<IValidator<UpdateModDTO>, UpdateModDTOValidator>();
+            builder.Services.AddTransient<IValidator<CreateModPackDTO>, CreateModPackDTOValidator>();
 
             builder.Services.AddScoped<ModService>();
             builder.Services.AddScoped<ModPackService>();

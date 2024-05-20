@@ -13,10 +13,13 @@ namespace modLib.Controllers
     public class ModPackController : ControllerBase
     {
         private readonly ModPackService _service;
+        private readonly ILogger<ModController> _logger;
 
-        public ModPackController(ModPackService service)
+        public ModPackController(ModPackService service, 
+            ILogger<ModController> logger)
         {
             _service = service;
+            _logger = logger;
         }
 
         [HttpGet("modPacks/{id}")]
@@ -32,9 +35,10 @@ namespace modLib.Controllers
             { 
                 return Ok(ex.Message);
             }
-            catch
+            catch(Exception ex)
             {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+                _logger.LogError(ex, "An unexpected error occurred while getting modPack.");
+                return StatusCode(StatusCodes.Status500InternalServerError, new { error = "An unexpected error occurred. Please try again later." });
             }
         }
 
@@ -47,9 +51,10 @@ namespace modLib.Controllers
 
                 return Ok(mods);
             }
-            catch
+            catch (Exception ex)
             {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+                _logger.LogError(ex, "An unexpected error occurred while getting modPacks.");
+                return StatusCode(StatusCodes.Status500InternalServerError, new { error = "An unexpected error occurred. Please try again later." });
             }
         }
 
@@ -70,9 +75,10 @@ namespace modLib.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            catch
+            catch (Exception ex)
             {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+                _logger.LogError(ex, "An unexpected error occurred while adding modPack.");
+                return StatusCode(StatusCodes.Status500InternalServerError, new { error = "An unexpected error occurred. Please try again later." });
             }
         }
 
@@ -89,9 +95,10 @@ namespace modLib.Controllers
             {
                 return NotFound();
             }
-            catch
+            catch (Exception ex)
             {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+                _logger.LogError(ex, "An unexpected error occurred while removing modPack.");
+                return StatusCode(StatusCodes.Status500InternalServerError, new { error = "An unexpected error occurred. Please try again later." });
             }
         }
 
@@ -108,9 +115,10 @@ namespace modLib.Controllers
             {
                 return NotFound();
             }
-            catch
+            catch (Exception ex)
             {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+                _logger.LogError(ex, "An unexpected error occurred while updating modPack.");
+                return StatusCode(StatusCodes.Status500InternalServerError, new { error = "An unexpected error occurred. Please try again later." });
             }
         }
 
@@ -130,9 +138,10 @@ namespace modLib.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            catch
+            catch (Exception ex)
             {
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+                _logger.LogError(ex, "An unexpected error occurred while adding mod to modPack.");
+                return StatusCode(StatusCodes.Status500InternalServerError, new { error = "An unexpected error occurred. Please try again later." });
             }
         }
     }

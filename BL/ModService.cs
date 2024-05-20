@@ -13,11 +13,10 @@ namespace modLib.BL
         public async Task CreateAsync(CreateModDTO createModel)
         {
             var mod = await _context.Mods.FirstOrDefaultAsync(m => m.Name == createModel.Name);
-            var game = await _context.Games.FindAsync(createModel.GameId);
-
             if (mod != null)
                 throw new AlreadyExistException("Mod with that name already exist");
 
+            var game = await _context.Games.FindAsync(createModel.GameId);
             if(game == null)
                 throw new ForeignKeyException($"Game with id: {createModel.GameId} not foud");
 

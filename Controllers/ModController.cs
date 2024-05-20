@@ -39,7 +39,7 @@ namespace modLib.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An unexpected error occurred while adding mods.");
+                _logger.LogError(ex, "An unexpected error occurred while getting mod.");
                 return StatusCode(StatusCodes.Status500InternalServerError, new { error = "An unexpected error occurred. Please try again later." });
             }
         }
@@ -55,7 +55,7 @@ namespace modLib.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An unexpected error occurred while adding mods.");
+                _logger.LogError(ex, "An unexpected error occurred while getting mods.");
                 return StatusCode(StatusCodes.Status500InternalServerError, new { error = "An unexpected error occurred. Please try again later." });
             }
         }
@@ -83,7 +83,7 @@ namespace modLib.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An unexpected error occurred while adding mods.");
+                _logger.LogError(ex, "An unexpected error occurred while adding mod.");
                 return StatusCode(StatusCodes.Status500InternalServerError, new { error = "An unexpected error occurred. Please try again later." });
             }
         }
@@ -137,7 +137,7 @@ namespace modLib.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An unexpected error occurred while adding mods.");
+                _logger.LogError(ex, "An unexpected error occurred while removing mod.");
                 return StatusCode(StatusCodes.Status500InternalServerError, new { error = "An unexpected error occurred. Please try again later." });
             }
         }
@@ -161,7 +161,7 @@ namespace modLib.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An unexpected error occurred while adding mods.");
+                _logger.LogError(ex, "An unexpected error occurred while updating mod.");
                 return StatusCode(StatusCodes.Status500InternalServerError, new { error = "An unexpected error occurred. Please try again later." });
             }
         }

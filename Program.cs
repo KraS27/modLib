@@ -28,6 +28,7 @@ namespace modLib
             builder.Services.AddTransient<IValidator<CreateModDTO>, CreateModDTOValidator>();
             builder.Services.AddTransient<IValidator<UpdateModDTO>, UpdateModDTOValidator>();
             builder.Services.AddTransient<IValidator<CreateModPackDTO>, CreateModPackDTOValidator>();
+            builder.Services.AddTransient<IValidator<UpdateModPackDTO>, UpdateModPackDTOValidator>();
 
             builder.Services.AddScoped<ModService>();
             builder.Services.AddScoped<ModPackService>();

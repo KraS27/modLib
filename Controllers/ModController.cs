@@ -155,9 +155,9 @@ namespace modLib.Controllers
 
                 return Ok();
             }
-            catch (NullReferenceException)
+            catch (NotFoundException ex)
             {
-                return NotFound();
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {

@@ -16,14 +16,17 @@ namespace modLib.Controllers
         private readonly ModPackService _service;
         private readonly ILogger<ModController> _logger;
         private readonly IValidator<CreateModPackDTO> _createModPackvalidator;
+        private readonly IValidator<UpdateModPackDTO> _updateModPackvalidator;
 
         public ModPackController(ModPackService service,
             ILogger<ModController> logger,
-            IValidator<CreateModPackDTO> createModPackvalidator)
+            IValidator<CreateModPackDTO> createModPackvalidator,
+            IValidator<UpdateModPackDTO> updateModPackvalidator)
         {
             _service = service;
             _logger = logger;
             _createModPackvalidator = createModPackvalidator;
+            _updateModPackvalidator = updateModPackvalidator;
         }
 
         [HttpGet("modPacks/{id}")]
@@ -63,16 +66,16 @@ namespace modLib.Controllers
         }
 
         [HttpPost("modPacks")]
-        public async Task<IActionResult> AddModPack([FromBody] CreateModPackDTO modPackDTO)
+        public async Task<IActionResult> AddModPack([FromBody] CreateModPackDTO createModel)
         {
-            var validationResult = _createModPackvalidator.Validate(modPackDTO);
+            var validationResult = _createModPackvalidator.Validate(createModel);
 
             if (!validationResult.IsValid)
                 return BadRequest(validationResult.Errors.Select(e => e.ErrorMessage));
 
             try
             {
-                await _service.CreateAsync(modPackDTO);
+                await _service.CreateAsync(createModel);
 
                 return Ok();
             }
@@ -112,17 +115,22 @@ namespace modLib.Controllers
         }
 
         [HttpPut("modPacks")]
-        public async Task<IActionResult> UpdateModPack([FromBody] UpdateModPackDTO modPackModel)
+        public async Task<IActionResult> UpdateModPack([FromBody] UpdateModPackDTO updateModel)
         {
+            var validationResult = _updateModPackvalidator.Validate(updateModel);
+
+            if (!validationResult.IsValid)
+                return BadRequest(validationResult.Errors.Select(e => e.ErrorMessage));
+
             try
             {
-                await _service.UpdateAsync(modPackModel);
+                await _service.UpdateAsync(updateModel);
 
                 return Ok();
             }
-            catch (NullReferenceException)
+            catch (NotFoundException ex)
             {
-                return NotFound();
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {

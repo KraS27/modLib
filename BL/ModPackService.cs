@@ -37,22 +37,23 @@ namespace modLib.BL
         public async Task AddModToModPack(int modPackId, int modId)
         {
             var mod = await _context.Mods.FindAsync(modId);
-            var modPack = await _context.ModPacks.FindAsync(modPackId);
-
             if (mod == null)
-                throw new ArgumentNullException($"Mod with id: {modId} Not Found");
+                throw new NotFoundException($"Mod with id: {modId} Not Found");
+
+            var modPack = await _context.ModPacks.FindAsync(modPackId);            
             if (modPack == null)
-                throw new ArgumentNullException($"ModPack with id: {modPackId} Not Found");
+                throw new NotFoundException($"ModPack with id: {modPackId} Not Found");
+
+            var relation = await _context.ModModPacks.AnyAsync(m => m.ModPackId == modPackId && m.ModId == modId);
+            if (relation)
+                throw new AlreadyExistException($"Mod with id: {modId} already added to modPack with id: {modPackId}");
 
             var newRelation = new ModModPack { ModId = modId, ModPackId =  modPackId };
-
-            var relation = await _context.ModModPacks.FirstOrDefaultAsync(m => m.ModPackId == modPackId && m.ModId == modId);
-            if (relation != null)
-                throw new AlreadyExistException($"Mod with id: {modId} already added to modPack with id: {modPackId}");
 
             await _context.ModModPacks.AddAsync(newRelation);
             await _context.SaveChangesAsync();
         }
+
 
         public async Task<IEnumerable<GetModPacksDTO>> GetAllDTOAsync()
         {

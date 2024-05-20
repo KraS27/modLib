@@ -147,7 +147,7 @@ namespace modLib.Controllers
                 await _service.AddModToModPack(relation.ModPackId, relation.ModId);
                 return Ok();
             }
-            catch(ArgumentNullException ex)
+            catch(NotFoundException ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -161,5 +161,11 @@ namespace modLib.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new { error = "An unexpected error occurred. Please try again later." });
             }
         }
+
+        //[HttpPost("modPacks/addMods")]
+        //public async Task<IActionResult> AddModsToModPack([FromBody] List<ModModPack> relations)
+        //{
+
+        //}
     }
 }

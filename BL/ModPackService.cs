@@ -54,6 +54,39 @@ namespace modLib.BL
             await _context.SaveChangesAsync();
         }
 
+        public async Task AddModsToModPack(AddModsToModPackDTO addModel)
+        {
+            var modPack = await _context.ModPacks.FindAsync(addModel.ModPackId);
+            if (modPack == null)
+                throw new NotFoundException($"ModPack with id: {addModel.ModPackId} Not Found");
+
+            var existingModsId = await _context.Mods
+                .Where(m => addModel.ModsId.Contains(m.Id))  
+                .Select(m => m.Id)
+                .ToListAsync();
+
+            var existingRelations = await _context.ModModPacks
+                .Where(m => m.ModPackId == modPack.Id)
+                .Select(m => m.ModId)
+                .ToListAsync();
+
+            var realations = new List<ModModPack>();
+
+            foreach (var modID in addModel.ModsId)  
+            {
+                if (!existingModsId.Contains(modID))
+                    throw new NotFoundException($"Mod with id: {modID} NOT FOUND");
+
+                if (existingRelations.Contains(modID))
+                    throw new AlreadyExistException($"Mod with id {modID} already added to modPack with id: {modPack.Id}");
+
+                var relation = new ModModPack { ModId = modID, ModPackId = modPack.Id };
+                realations.Add(relation);
+            }
+             
+            await _context.ModModPacks.AddRangeAsync(realations);
+            await _context.SaveChangesAsync();
+        }
 
         public async Task<IEnumerable<GetModPacksDTO>> GetAllDTOAsync()
         {

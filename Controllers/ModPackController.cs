@@ -162,10 +162,27 @@ namespace modLib.Controllers
             }
         }
 
-        //[HttpPost("modPacks/addMods")]
-        //public async Task<IActionResult> AddModsToModPack([FromBody] List<ModModPack> relations)
-        //{
-
-        //}
+        [HttpPost("modPacks/addMods")]
+        public async Task<IActionResult> AddModsToModPack([FromBody] AddModsToModPackDTO relations)
+        {
+            try
+            {
+                await _service.AddModsToModPack(relations);
+                return Ok();
+            }
+            catch (NotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (AlreadyExistException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An unexpected error occurred while adding mod to modPack.");
+                return StatusCode(StatusCodes.Status500InternalServerError, new { error = "An unexpected error occurred. Please try again later." });
+            }
+        }
     }
 }

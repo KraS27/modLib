@@ -5,10 +5,10 @@ namespace modLib.Controllers
 {
     public class GameController : ControllerBase
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<GameController> _logger;
         private readonly GameService _service;
 
-        public GameController(ILogger logger, GameService service)
+        public GameController(ILogger<GameController> logger, GameService service)
         {
             _logger = logger;
             _service = service;
@@ -30,6 +30,20 @@ namespace modLib.Controllers
             }
         }
 
+        [HttpGet("/games")]
+        public async Task<IActionResult> GetGames()
+        {
+            try
+            {
+                var games = await _service.GetAllAsync();
 
+                return Ok(games);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An unexpected error occurred while getting game.");
+                return StatusCode(StatusCodes.Status500InternalServerError, new { error = "An unexpected error occurred. Please try again later." });
+            }
+        }
     }
 }

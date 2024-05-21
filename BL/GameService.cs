@@ -9,7 +9,7 @@ namespace modLib.BL
     {
         public GameService(AppDbContext context) : base(context) { }
 
-        public new async Task<GetGameDTO> GetAsync(int id)
+        public new async Task<GetGameDTO?> GetAsync(int id)
         {
             var game = await _context.Games
                 .Select(g => new GetGameDTO
@@ -18,11 +18,24 @@ namespace modLib.BL
                     Name = g.Name,
                     Version = g.Version,
                     ModPacks = g.ModPacks!.Select(m => m.Name).ToList(),
-                    ModsCount = g.Mods.Count
+                    ModsCount = g.Mods!.Count
                 })
                 .FirstOrDefaultAsync(g => g.Id == id);
                 
             return game;
+        }
+
+        public new async Task<List<GetGamesDTO>> GetAllAsync()
+        {
+            var games = await _context.Games.Select(g => new GetGamesDTO
+            {
+                Id = g.Id,
+                Name = g.Name,
+                Version = g.Version,
+                ModPacksCount = g.ModPacks!.Count
+            }).ToListAsync();
+
+            return games;
         }
     }
 }

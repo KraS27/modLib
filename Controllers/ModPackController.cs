@@ -34,7 +34,7 @@ namespace modLib.Controllers
         {
             try
             {
-                var mod = await _service.GetDTOAsync(id);
+                var mod = await _service.GetAsync(id);
 
                 return Ok(mod);
             }
@@ -54,7 +54,7 @@ namespace modLib.Controllers
         {
             try
             {
-                var mods = await _service.GetAllDTOAsync();
+                var mods = await _service.GetAllAsync();
 
                 return Ok(mods);
             }

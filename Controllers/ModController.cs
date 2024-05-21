@@ -49,7 +49,7 @@ namespace modLib.Controllers
         {
             try
             {
-                var mods = await _service.GetAllWithGamesAsync();
+                var mods = await _service.GetAllAsync();
 
                 return Ok(mods);
             }

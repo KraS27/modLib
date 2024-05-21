@@ -34,18 +34,16 @@ namespace modLib.BL
 
         public new async Task<IEnumerable<GetModDTO>> GetAllAsync()
         {
-            var mods = await _context.Mods.Include(m => m.Game).ToListAsync();
-
-            var modsGetDTO = mods.Select(m => new GetModDTO
+            var mods = await _context.Mods.Select(m => new GetModDTO
             {
                 Id = m.Id,
                 Name = m.Name,
                 Description = m.Description,
                 Path = m.Path,
                 Game = m.Game!.Name
-            });
+            }).ToListAsync();
 
-            return modsGetDTO;
+            return mods;
         }
 
         public async Task UpdateAsync(UpdateModDTO updateModel)

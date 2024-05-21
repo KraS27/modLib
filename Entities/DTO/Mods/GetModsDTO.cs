@@ -1,6 +1,6 @@
 ﻿namespace modLib.Entities.DTO.Mods
 {
-    public class GetModDTO
+    public class GetModsDTO
     {
         public int Id { get; set; }
 

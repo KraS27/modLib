@@ -3,6 +3,7 @@ using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using modLib.BL;
+using modLib.Entities;
 using modLib.Entities.DTO.Mods;
 using modLib.Entities.Exceptions;
 using modLib.Models.Entities;
@@ -45,13 +46,17 @@ namespace modLib.Controllers
         }
 
         [HttpGet("mods")]
-        public async Task<IActionResult> GetMods()
+        public async Task<IActionResult> GetMods([FromQuery] int page = 1, [FromQuery] int pageSize = 5)
         {
             try
             {
-                var mods = await _service.GetAllAsync();
+                var mods = await _service.GetAllAsync(new Pagination<GetModsDTO>(page, pageSize));
 
                 return Ok(mods);
+            }
+            catch (PaginationException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {

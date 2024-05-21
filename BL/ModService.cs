@@ -42,7 +42,7 @@ namespace modLib.BL
                 Description = m.Description,
                 Path = m.Path,
                 Game = m.Game!.Name
-            }).AsQueryable();
+            }).OrderBy(m => m.Id).AsQueryable();
 
             return await pagination.Apply(mods).ToListAsync();
         }

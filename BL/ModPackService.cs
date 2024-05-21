@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using modLib.DB;
 using modLib.DB.Relationships;
+using modLib.Entities;
 using modLib.Entities.DTO.ModPacks;
 using modLib.Entities.Exceptions;
 using modLib.Entities.Models;
@@ -88,18 +89,18 @@ namespace modLib.BL
             await _context.SaveChangesAsync();
         }
 
-        public new async Task<IEnumerable<GetModPacksDTO>> GetAllAsync()
+        public async Task<IEnumerable<GetModPacksDTO>> GetAllAsync(Pagination<GetModPacksDTO> pagination)
         {
-            var modPacks = await _context.ModPacks.Select(m => new GetModPacksDTO
+            var modPacks = _context.ModPacks.Select(m => new GetModPacksDTO
             {
                 Id = m.Id,
                 Name = m.Name,
                 Description = m.Description,
                 Game = m.Game!.Name,
                 ModsCount = m.ModModPacks!.Count()
-            }) .ToListAsync();
+            }).OrderBy(m => m.Id).AsQueryable();
 
-            return modPacks;
+            return await pagination.Apply(modPacks).ToListAsync();
         }
         
         public new async Task<GetModPackDTO> GetAsync(int id)

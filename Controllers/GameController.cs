@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using modLib.BL;
+using modLib.Entities;
+using modLib.Entities.DTO.Game;
 
 namespace modLib.Controllers
 {
@@ -31,11 +33,11 @@ namespace modLib.Controllers
         }
 
         [HttpGet("/games")]
-        public async Task<IActionResult> GetGames()
+        public async Task<IActionResult> GetGames([FromQuery] int page = 1, [FromQuery] int pageSize = 5)
         {
             try
             {
-                var games = await _service.GetAllAsync();
+                var games = await _service.GetAllAsync(new Pagination<GetGamesDTO>(page, pageSize));
 
                 return Ok(games);
             }

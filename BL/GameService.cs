@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using modLib.DB;
+using modLib.Entities;
 using modLib.Entities.DbModels;
 using modLib.Entities.DTO.Game;
+using modLib.Entities.DTO.Mods;
 
 namespace modLib.BL
 {
@@ -25,17 +27,17 @@ namespace modLib.BL
             return game;
         }
 
-        public new async Task<List<GetGamesDTO>> GetAllAsync()
+        public async Task<IEnumerable<GetGamesDTO>> GetAllAsync(Pagination<GetGamesDTO> pagination)
         {
-            var games = await _context.Games.Select(g => new GetGamesDTO
+            var games = _context.Games.Select(g => new GetGamesDTO
             {
                 Id = g.Id,
                 Name = g.Name,
                 Version = g.Version,
                 ModPacksCount = g.ModPacks!.Count
-            }).ToListAsync();
+            }).OrderBy(m => m.Id).AsQueryable();
 
-            return games;
+            return await pagination.Apply(games).ToListAsync();
         }
     }
 }

@@ -1,12 +1,10 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using modLib.BL;
 using modLib.DB.Relationships;
+using modLib.Entities;
 using modLib.Entities.DTO.ModPacks;
 using modLib.Entities.Exceptions;
-using modLib.Entities.Models;
-using modLib.Models.Entities;
 
 namespace modLib.Controllers
 {
@@ -50,11 +48,11 @@ namespace modLib.Controllers
         }
 
         [HttpGet("modPacks")]
-        public async Task<IActionResult> GetModPacks()
+        public async Task<IActionResult> GetModPacks([FromQuery] int page = 1, [FromQuery] int pageSize = 5)
         {
             try
             {
-                var mods = await _service.GetAllAsync();
+                var mods = await _service.GetAllAsync(new Pagination<GetModPacksDTO>(page, pageSize));
 
                 return Ok(mods);
             }

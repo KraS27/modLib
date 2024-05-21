@@ -88,7 +88,7 @@ namespace modLib.BL
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<GetModPacksDTO>> GetAllDTOAsync()
+        public new async Task<IEnumerable<GetModPacksDTO>> GetAllAsync()
         {
             var modPacks = await _context.ModPacks.Select(m => new GetModPacksDTO
             {
@@ -102,7 +102,7 @@ namespace modLib.BL
             return modPacks;
         }
         
-        public async Task<GetModPackDTO> GetDTOAsync(int id)
+        public new async Task<GetModPackDTO> GetAsync(int id)
         {
             var modPackDTO = await _context.ModPacks
                 .Where(m => m.Id == id)

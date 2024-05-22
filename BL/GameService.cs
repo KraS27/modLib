@@ -49,7 +49,6 @@ namespace modLib.BL
 
             var game = new GameModel
             {
-                Id = createModel.Id,
                 Name = createModel.Name,
                 Version = createModel.Version,
             };
@@ -58,6 +57,14 @@ namespace modLib.BL
             await _context.SaveChangesAsync();
         }
 
+        public async Task UpdateAsync(UpdateGameDTO updateModel)
+        {
+            var toUpdate = await _context.Games.FindAsync(updateModel.Id);
+            if (toUpdate == null)
+                throw new NotFoundException($"Game with id: {updateModel.Id} NOT FOUND");
 
+            _context.Games.Entry(toUpdate).CurrentValues.SetValues(updateModel);
+            await _context.SaveChangesAsync();
+        }
     }
 }

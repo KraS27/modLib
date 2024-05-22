@@ -4,6 +4,7 @@ using modLib.Entities;
 using modLib.Entities.DbModels;
 using modLib.Entities.DTO.Game;
 using modLib.Entities.DTO.Mods;
+using modLib.Entities.Exceptions;
 
 namespace modLib.BL
 {
@@ -39,5 +40,24 @@ namespace modLib.BL
 
             return await pagination.Apply(games).ToListAsync();
         }
+
+        public async Task CreateAsync(CreateGameDTO createModel)
+        {
+            var existGame = await _context.Games.FirstOrDefaultAsync(g => g.Name == createModel.Name);
+            if (existGame != null)
+                throw new AlreadyExistException($"Game with name: {createModel.Name} already exist");
+
+            var game = new GameModel
+            {
+                Id = createModel.Id,
+                Name = createModel.Name,
+                Version = createModel.Version,
+            };
+
+            await _context.Games.AddAsync(game);
+            await _context.SaveChangesAsync();
+        }
+
+
     }
 }

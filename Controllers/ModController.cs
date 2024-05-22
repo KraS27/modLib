@@ -66,15 +66,15 @@ namespace modLib.Controllers
         }
 
         [HttpPost("mods")]
-        public async Task<IActionResult> AddMod([FromBody] CreateModDTO modDTO)
+        public async Task<IActionResult> AddMod([FromBody] CreateModDTO createModel)
         {
-            var validationResult = await _createModDTOValidator.ValidateAsync(modDTO);
+            var validationResult = await _createModDTOValidator.ValidateAsync(createModel);
             if (!validationResult.IsValid)
                 return BadRequest(validationResult.Errors.Select(e => e.ErrorMessage));
 
             try
             {                                                
-                await _service.CreateAsync(modDTO);
+                await _service.CreateAsync(createModel);
 
                 return Ok();
             }
@@ -148,15 +148,15 @@ namespace modLib.Controllers
         }
 
         [HttpPut("mods")]
-        public async Task<IActionResult> UpdateMod([FromBody] UpdateModDTO modModel)
+        public async Task<IActionResult> UpdateMod([FromBody] UpdateModDTO updateModel)
         {
             try
             {
-                var validationResult = await _updateModDTOValidator.ValidateAsync(modModel);
+                var validationResult = await _updateModDTOValidator.ValidateAsync(updateModel);
                 if (!validationResult.IsValid)
                     return BadRequest(validationResult.Errors.Select(e => e.ErrorMessage));
 
-                await _service.UpdateAsync(modModel);
+                await _service.UpdateAsync(updateModel);
 
                 return Ok();
             }

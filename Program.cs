@@ -5,6 +5,7 @@ using modLib.DB;
 using modLib.Entities.DTO.Game;
 using modLib.Entities.DTO.ModPacks;
 using modLib.Entities.DTO.Mods;
+using modLib.Entities.Extensions;
 using modLib.Validators.Game;
 using modLib.Validators.Mod;
 using modLib.Validators.ModPack;
@@ -27,12 +28,7 @@ namespace modLib
             builder.Services.AddSwaggerGen();           
             builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connection));
 
-            builder.Services.AddTransient<IValidator<CreateModDTO>, CreateModDTOValidator>();
-            builder.Services.AddTransient<IValidator<UpdateModDTO>, UpdateModDTOValidator>();
-            builder.Services.AddTransient<IValidator<CreateModPackDTO>, CreateModPackDTOValidator>();
-            builder.Services.AddTransient<IValidator<UpdateModPackDTO>, UpdateModPackDTOValidator>();
-            builder.Services.AddTransient<IValidator<CreateGameDTO>, CreateGameDTOValidator>();
-            builder.Services.AddTransient<IValidator<UpdateGameDTO>, UpdateGameDTOValidator>();
+            builder.Services.AddValidators();
 
             builder.Services.AddScoped<ModService>();
             builder.Services.AddScoped<ModPackService>();

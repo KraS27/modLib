@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using modLib.BL;
 using modLib.DB.Relationships;
-using modLib.Entities;
 using modLib.Entities.DTO.ModPacks;
 using modLib.Entities.Exceptions;
+using modLib.Entities.Structs;
 
 namespace modLib.Controllers
 {

@@ -1,11 +1,10 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using modLib.BL;
-using modLib.Entities;
 using modLib.Entities.DTO.Game;
-using modLib.Entities.DTO.Mods;
 using modLib.Entities.Exceptions;
-using modLib.Validators.Mod;
+using modLib.Entities.Structs;
+
 
 namespace modLib.Controllers
 {

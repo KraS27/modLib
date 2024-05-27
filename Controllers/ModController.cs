@@ -1,12 +1,9 @@
 ﻿using FluentValidation;
-using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using modLib.BL;
-using modLib.Entities;
 using modLib.Entities.DTO.Mods;
 using modLib.Entities.Exceptions;
-using modLib.Models.Entities;
+using modLib.Entities.Structs;
 
 namespace modLib.Controllers
 {

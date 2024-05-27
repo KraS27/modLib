@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using modLib.DB;
-using modLib.Entities;
 using modLib.Entities.DbModels;
 using modLib.Entities.DTO.Game;
 using modLib.Entities.DTO.Mods;
 using modLib.Entities.Exceptions;
+using modLib.Entities.Structs;
 
 namespace modLib.BL
 {

@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using modLib.DB;
-using modLib.Entities;
 using modLib.Entities.DTO.Mods;
 using modLib.Entities.Exceptions;
+using modLib.Entities.Structs;
 using modLib.Models.Entities;
 
 namespace modLib.BL

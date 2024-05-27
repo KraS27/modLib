@@ -1,9 +1,9 @@
 ﻿using modLib.Entities.Exceptions;
 
-namespace modLib.Entities
+namespace modLib.Entities.Structs
 {
     public struct Pagination<T>
-    {       
+    {
         public int Page { get; set; } = 1;
 
         public int PageSize { get; set; } = 5;
@@ -19,7 +19,7 @@ namespace modLib.Entities
             if (Page < 1)
                 throw new PaginationException("Page must be greater than 0");
 
-            if(PageSize > 20)
+            if (PageSize > 20)
                 throw new PaginationException("PageSize value should not exceed 20");
 
             int skip = (Page - 1) * PageSize;

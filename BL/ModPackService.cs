@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using modLib.DB;
 using modLib.DB.Relationships;
-using modLib.Entities;
 using modLib.Entities.DTO.ModPacks;
 using modLib.Entities.Exceptions;
 using modLib.Entities.Models;
+using modLib.Entities.Structs;
 using modLib.Models.Entities;
 
 namespace modLib.BL

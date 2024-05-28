@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Authorization.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using modLib.DB;
 using modLib.Entities;
@@ -6,6 +7,7 @@ using modLib.Entities.DbModels;
 using modLib.Entities.DTO.Auth;
 using modLib.Entities.Exceptions;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 
 namespace modLib.BL
@@ -64,8 +66,11 @@ namespace modLib.BL
                 var signingCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key!)), SecurityAlgorithms.HmacSha256);
 
+                Claim[] claims = new[] { new Claim(ClaimTypes.Name, user.UserName) };
+
                 var token = new JwtSecurityToken(
                     signingCredentials: signingCredentials,
+                    claims: claims,
                     expires: DateTime.UtcNow.AddHours(2));
 
                 var tokenValue = new JwtSecurityTokenHandler().WriteToken(token);

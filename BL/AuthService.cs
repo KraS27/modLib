@@ -15,10 +15,12 @@ namespace modLib.BL
     public class AuthService
     {
         private readonly AppDbContext _context;
+        private readonly IConfiguration _config;
 
-        public AuthService(AppDbContext context)
+        public AuthService(AppDbContext context, IConfiguration config)
         {
             _context = context;
+            _config = config;
         }
 
         public async Task Register(RegisterModel registerModel)
@@ -48,21 +50,16 @@ namespace modLib.BL
             if (PasswordHasher.Verify(loginModel.Password, user.Password))
                 throw new LoginException("Wrong password");
 
+            var token = JwtProvider.GenerateToken(user, _config);
 
+            return token;
         }
 
-        private class JwtProvider
+        public static class JwtProvider
         {
-            private readonly IConfiguration _config;
-
-            public JwtProvider(IConfiguration config)
+            public static string GenerateToken(UserModel user, IConfiguration config)
             {
-                _config = config;
-            }
-
-            private string GenerateToken(UserModel user)
-            {
-                var key = _config["Jwt:Key"];
+                var key = config["Jwt:Key"];
                 var signingCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key!)), SecurityAlgorithms.HmacSha256);
 

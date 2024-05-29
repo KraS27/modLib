@@ -57,8 +57,8 @@ namespace modLib.Controllers
 
             try
             {
-                await _authService.Login(loginModel);
-                return Ok();
+                var key = await _authService.Login(loginModel);
+                return Ok(key);
             }
             catch (NotFoundException ex)
             {

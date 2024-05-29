@@ -48,7 +48,7 @@ namespace modLib.BL
                 throw new NotFoundException($"User with UserName: {loginModel.UserName} NOT FOUND");
 
             if (PasswordHasher.Verify(loginModel.Password, user.Password))
-                throw new LoginException("Wrong password");
+                throw new InvalidPasswordException("Wrong password");
 
             var token = JwtProvider.GenerateToken(user, _config);
 

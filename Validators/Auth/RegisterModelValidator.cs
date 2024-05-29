@@ -3,9 +3,9 @@ using modLib.Entities.DTO.Auth;
 
 namespace modLib.Validators.Auth
 {
-    public class RegisterModelValidation : AbstractValidator<RegisterModel>
+    public class RegisterModelValidator : AbstractValidator<RegisterModel>
     {
-        public RegisterModelValidation()
+        public RegisterModelValidator()
         {
             RuleFor(x => x.UserName)
                 .NotEmpty().WithMessage("Username required")

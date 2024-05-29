@@ -23,7 +23,8 @@ namespace modLib.Entities.Extensions
             services.AddTransient<IValidator<CreateGameDTO>, CreateGameDTOValidator>();
             services.AddTransient<IValidator<UpdateGameDTO>, UpdateGameDTOValidator>();
 
-            services.AddTransient<IValidator<RegisterModel>, RegisterModelValidation>();
+            services.AddTransient<IValidator<RegisterModel>, RegisterModelValidator>();
+            services.AddTransient<IValidator<LoginModel>, LoginModelValidator>();
         }
     }
 }

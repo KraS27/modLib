@@ -14,13 +14,15 @@ namespace modLib.Controllers
         private readonly IValidator<LoginModel> _loginValidator;
         private readonly AuthService _authService;
 
-        public AuthController(IValidator<RegisterModel> registerValidator, 
-            AuthService authService, 
-            IValidator<LoginModel> loginValidator)
+        public AuthController(IValidator<RegisterModel> registerValidator,
+            AuthService authService,
+            IValidator<LoginModel> loginValidator,
+            ILogger<AuthController> logger)
         {
             _registerValidator = registerValidator;
             _authService = authService;
             _loginValidator = loginValidator;
+            _logger = logger;
         }
 
         [HttpPost("/auth/register")]

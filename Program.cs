@@ -37,11 +37,14 @@ namespace modLib
                     var key = builder.Configuration["Jwt:Key"];
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
+                        ValidateAudience = false,
+                        ValidateIssuer = false,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key!))
                     };
                 });
+            builder.Services.AddAuthorization();
 
             builder.Services.AddValidators();
 
@@ -62,7 +65,6 @@ namespace modLib
 
             app.UseAuthentication();
             app.UseAuthorization();
-
 
             app.MapControllers();
 

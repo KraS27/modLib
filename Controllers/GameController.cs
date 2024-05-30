@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using modLib.BL;
 using modLib.Entities.DTO.Game;
@@ -8,6 +9,8 @@ using modLib.Entities.Structs;
 
 namespace modLib.Controllers
 {
+    [ApiController]
+    [Authorize]
     public class GameController : ControllerBase
     {
         private readonly ILogger<GameController> _logger;

@@ -58,6 +58,10 @@ namespace modLib.Controllers
             try
             {
                 var key = await _authService.Login(loginModel);
+                HttpContext context = HttpContext;
+
+                context.Response.Cookies.Append("jwt", key);
+
                 return Ok(key);
             }
             catch (NotFoundException ex)

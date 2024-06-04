@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using modLib.BL;
 using modLib.DB.Relationships;
@@ -9,6 +10,7 @@ using modLib.Entities.Structs;
 namespace modLib.Controllers
 {
     [ApiController]
+    [Authorize]
     public class ModPackController : ControllerBase
     {
         private readonly ModPackService _service;

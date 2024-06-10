@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using modLib.BL;
 using modLib.Entities.DTO.Auth;
@@ -7,6 +8,7 @@ using modLib.Entities.Exceptions;
 namespace modLib.Controllers
 {
     [ApiController]
+    [AllowAnonymous]
     public class AuthController : ControllerBase
     {
         private readonly ILogger<AuthController> _logger;

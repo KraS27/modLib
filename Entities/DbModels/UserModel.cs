@@ -11,5 +11,7 @@ namespace modLib.Entities.DbModels
         public string Password { get; set; } = string.Empty;
 
         public int Age { get; set; }
+
+        public ICollection<RoleModel> Roles { get; set; } = new List<RoleModel>();
     }
 }

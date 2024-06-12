@@ -2,9 +2,9 @@
 {
     public enum Permission
     {
-        Read = 0,
-        Create = 1,
-        Update = 2,
-        Delete = 3
+        Read = 1,
+        Create = 2,
+        Update = 3,
+        Delete = 4
     }
 }

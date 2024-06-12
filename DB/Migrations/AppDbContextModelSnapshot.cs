@@ -84,7 +84,7 @@ namespace modLib.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("modLib.Entities.Models.ModPackModel", b =>

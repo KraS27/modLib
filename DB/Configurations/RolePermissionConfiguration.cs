@@ -23,6 +23,14 @@ namespace modLib.DB.Configurations
 
         private RolePermissionDTO[] ParseRolePermissions()
         {
+            var rpg = _authOptions.RolePermissions
+                .SelectMany(rp => rp.Permissions
+                .Select(p => new RolePermissionDTO
+                {
+                    RoleId = (int)Enum.Parse<Role>(rp.Role),
+                    PermissionId = (int)Enum.Parse<Permission>(p)
+                })).ToArray();
+
             return _authOptions.RolePermissions
                 .SelectMany(rp => rp.Permissions
                 .Select(p => new RolePermissionDTO

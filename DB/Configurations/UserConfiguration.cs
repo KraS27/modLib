@@ -21,9 +21,10 @@ namespace modLib.DB.Configurations
 
             builder.HasMany(u => u.Roles)
                 .WithMany(r => r.Users)
-                .UsingEntity<UserRoleDTO>(
+                .UsingEntity<UserRoleDTO>(                
                 l => l.HasOne<RoleModel>().WithMany().HasForeignKey(r => r.RoleId),
-                r => r.HasOne<UserModel>().WithMany().HasForeignKey(u => u.UserId));
+                r => r.HasOne<UserModel>().WithMany().HasForeignKey(u => u.UserId),
+                t => t.ToTable("user_roles"));
         }
     }
 }

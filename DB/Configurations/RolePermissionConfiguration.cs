@@ -16,6 +16,8 @@ namespace modLib.DB.Configurations
 
         public void Configure(EntityTypeBuilder<RolePermissionDTO> builder)
         {
+            builder.ToTable("role_permissions");
+
             builder.HasKey(r => new { r.RoleId, r.PermissionId });
 
             builder.HasData(ParseRolePermissions());

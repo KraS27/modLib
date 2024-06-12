@@ -1,6 +1,8 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using modLib.BL;
 using modLib.DB;
@@ -30,6 +32,8 @@ namespace modLib
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();           
             builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connection));
+
+            builder.Services.Configure<Entities.DTO.Auth.AuthorizationOptions>(builder.Configuration.GetSection(nameof(AuthorizationOptions)));
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>

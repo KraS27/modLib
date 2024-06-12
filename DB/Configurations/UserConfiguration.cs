@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using modLib.Entities.DbModels;
-using modLib.Entities.DTO.User;
+using modLib.Entities.DTO.Auth;
 
 namespace modLib.DB.Configurations
 {

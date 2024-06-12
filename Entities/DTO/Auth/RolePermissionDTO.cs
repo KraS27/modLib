@@ -1,4 +1,4 @@
-﻿namespace modLib.Entities.DTO.User
+﻿namespace modLib.Entities.DTO.Auth
 {
     public class RolePermissionDTO
     {

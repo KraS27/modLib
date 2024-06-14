@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using modLib.DB;
 using modLib.Entities;
+using modLib.Entities.Constants;
 using modLib.Entities.DbModels;
 using modLib.Entities.DTO.Auth;
 using modLib.Entities.Exceptions;
@@ -63,7 +64,7 @@ namespace modLib.BL
                 var signingCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key!)), SecurityAlgorithms.HmacSha256);
 
-                Claim[] claims = new[] { new Claim(ClaimTypes.Name, user.UserName) };
+                Claim[] claims = new[] { new Claim(CustomClaims.UserId, user.Id.ToString()) };
 
                 var token = new JwtSecurityToken(
                     signingCredentials: signingCredentials,

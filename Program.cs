@@ -66,6 +66,7 @@ namespace modLib
             builder.Services.AddScoped<ModPackService>();
             builder.Services.AddScoped<GameService>();
             builder.Services.AddScoped<AuthService>();
+            builder.Services.AddScoped<UserService>();
 
             var app = builder.Build();
 

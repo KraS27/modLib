@@ -14,7 +14,7 @@ namespace modLib.BL
             _context = context;
         }
 
-        public async Task<HashSet<Permission>> GetPermissions(int id)
+        public async Task<HashSet<Permission>> GetPermissionsAsync(int id)
         {
             var roles = await _context.Users
                     .AsNoTracking()

@@ -7,6 +7,7 @@ using modLib.DB;
 using modLib.Entities.DTO.Auth;
 using modLib.Entities.Enums;
 using modLib.Entities.Extensions;
+using modLib.Handlers;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -65,6 +66,8 @@ namespace modLib
             builder.Services.AddScoped<GameService>();
             builder.Services.AddScoped<AuthService>();
             builder.Services.AddScoped<UserService>();
+
+            builder.Services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
 
             var app = builder.Build();
 

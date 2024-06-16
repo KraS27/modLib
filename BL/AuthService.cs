@@ -6,6 +6,7 @@ using modLib.Entities;
 using modLib.Entities.Constants;
 using modLib.Entities.DbModels;
 using modLib.Entities.DTO.Auth;
+using modLib.Entities.Enums;
 using modLib.Entities.Exceptions;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;

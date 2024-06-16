@@ -1,18 +1,12 @@
-using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using modLib.BL;
 using modLib.DB;
-using modLib.Entities.DTO.Game;
-using modLib.Entities.DTO.ModPacks;
-using modLib.Entities.DTO.Mods;
+using modLib.Entities.DTO.Auth;
+using modLib.Entities.Enums;
 using modLib.Entities.Extensions;
-using modLib.Validators.Game;
-using modLib.Validators.Mod;
-using modLib.Validators.ModPack;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -33,7 +27,7 @@ namespace modLib
             builder.Services.AddSwaggerGen();           
             builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connection));
 
-            builder.Services.Configure<Entities.DTO.Auth.AuthorizationOptions>(builder.Configuration.GetSection(nameof(AuthorizationOptions)));
+            builder.Services.Configure<Entities.DTO.Auth.AuthorizationOptions>(builder.Configuration.GetSection(nameof(Entities.DTO.Auth.AuthorizationOptions)));
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -58,7 +52,11 @@ namespace modLib
                         }
                     };
                 });
-            builder.Services.AddAuthorization();
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AdminOnly", policy => 
+                policy.AddRequirements(new PermissionRequirement(new List<Permission> {Permission.Create})));
+            });
 
             builder.Services.AddValidators();
 

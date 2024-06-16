@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using modLib.DB;
 using modLib.Entities.DbModels;
 using modLib.Entities.DTO.Game;
@@ -41,6 +42,7 @@ namespace modLib.BL
             return await pagination.Apply(games).ToListAsync();
         }
 
+        [Authorize("AdminOnly")]
         public async Task CreateAsync(CreateGameDTO createModel)
         {
             var existGame = await _context.Games.FirstOrDefaultAsync(g => g.Name == createModel.Name);

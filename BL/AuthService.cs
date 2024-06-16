@@ -33,10 +33,14 @@ namespace modLib.BL
             if (existUser != null)
                 throw new AlreadyExistException($"User with userName:{registerModel.UserName} already exist.");
 
+            var roleEntity = await _context.Roles
+                .SingleOrDefaultAsync(r => r.Id == (int)Role.Rabotyaga) ?? throw new InvalidOperationException();
+
             var user = new UserModel
             {
                 UserName = registerModel.UserName,
-                Password = hashedPassword
+                Password = hashedPassword,
+                Roles = new[] { roleEntity }
             };
 
             await _context.Users.AddAsync(user);

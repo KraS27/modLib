@@ -25,6 +25,7 @@ namespace modLib.DB
         public DbSet<ModModPack> ModModPacks { get; set; }
         public DbSet<GameModel> Games { get; set; }
         public DbSet<UserModel> Users { get; set; }
+        public DbSet<RoleModel> Roles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

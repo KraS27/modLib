@@ -58,6 +58,7 @@ namespace modLib.Controllers
             }
         }
 
+        [Authorize("AdminOnly")]
         [HttpPost("/games")]
         public async Task<IActionResult> AddGame([FromBody] CreateGameDTO createModel)
         {

@@ -19,6 +19,7 @@ namespace modLib
         {
             var builder = WebApplication.CreateBuilder(args);
             var connection = builder.Configuration.GetConnectionString("DefaultConnection");
+            var postgresConnection = builder.Configuration.GetConnectionString("PostgresConnection");
 
             builder.Services.AddControllers().AddJsonOptions(options =>
             {
@@ -26,7 +27,7 @@ namespace modLib
             });
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();           
-            builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connection));
+            builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(postgresConnection));
 
             builder.Services.Configure<Entities.DTO.Auth.AuthorizationOptions>(builder.Configuration.GetSection(nameof(Entities.DTO.Auth.AuthorizationOptions)));
 
@@ -75,6 +76,7 @@ namespace modLib
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+                app.ApplyMigration();
             }
 
             app.UseHttpsRedirection();
